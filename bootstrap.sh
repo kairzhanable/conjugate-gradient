@@ -19,6 +19,7 @@ cd $SCRIPTDIR/third-parties/sfml-widgets/
 make -j$cpu_count
 cd src/Gui
 rsync -a --include '*/' --include '*.hpp' --exclude '*' . $SCRIPTDIR/include
+rsync -a --include '*/' --include '*.inl' --exclude '*' . $SCRIPTDIR/include
 cd ../../lib
 cp -a libsfml-widgets.a $SCRIPTDIR/lib/
 echo 
