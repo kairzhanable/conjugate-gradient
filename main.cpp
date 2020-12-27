@@ -6,9 +6,9 @@
 //#include<omp.h>
 
 #include<SFML/Graphics.hpp>
-#include "Gui/Menu.hpp"
-#include "Gui/Theme.hpp"
-#include "Gui/Gui.hpp"
+#include "Menu.hpp"
+#include "Theme.hpp"
+#include "Gui.hpp"
 
 using namespace std;
 using namespace std::chrono;
