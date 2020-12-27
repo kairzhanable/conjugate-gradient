@@ -3,7 +3,7 @@ CG Method implementation using C++ and SFML Visualization library
 
 ### Dependencies:
 This project depends on:
-* cmake, make and C/C++ compiler (currently tested on GNU Gcc and Apple's Clang)
+* cmake, make, rsync and C/C++ compiler (currently tested on GNU GCC and Apple's Clang)
 * [SFML Library](https://www.sfml-dev.org/). This can be installed with your favourite package manager.
 
   On Ubuntu:

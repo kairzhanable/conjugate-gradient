@@ -33,7 +33,7 @@ LINK_DIRECTORIES(${CMAKE_CURRENT_LIST_DIR}/lib)
 
 if(UNIX AND NOT APPLE)
     #GNU/Linux specific code
-    target_link_libraries(gradient PUBLIC sfml-graphics sfml-audio sfml-window sfml-system GL ${SFML-WIDGETS_LIB})
+    target_link_libraries(gradient PUBLIC sfml-graphics sfml-audio sfml-window sfml-system ${SFML-WIDGETS_LIB} GL)
 elseif(APPLE)
     #OSX specific code
     target_link_libraries(gradient PUBLIC sfml-graphics sfml-audio sfml-window sfml-system "-framework OpenGL" ${SFML-WIDGETS_LIB})
