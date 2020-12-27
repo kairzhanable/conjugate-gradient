@@ -1,5 +1,13 @@
 # conjugate-gradient
 CG Method implementation using C++ and SFML Visualization library
 
+### Usage:
 
-### For now, *demo* folder must be placed into the build directory. I know, this is kinda tricky, but it works. This issue is to be fixed with future updates (or, when I will have inspiration for that)
+run
+```
+./bootstrap.bat
+```
+The program will be built and installed into the build/ directory. To run it, simply execute:
+```
+./build/gradient
+```

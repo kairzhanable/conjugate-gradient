@@ -33,5 +33,5 @@ cmake ..
 make -j$cpu_count
 echo
 echo
-echo "Successfully built conjugate-gradient! Now run ./gradient to start the program!"
+echo "Successfully built conjugate-gradient! Now run ./build/gradient to start the program!"
 echo "Proudly made by Kiiiiiira. Enjoy!"
