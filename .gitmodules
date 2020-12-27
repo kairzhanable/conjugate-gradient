@@ -1,3 +1,0 @@
-[submodule "third-parties"]
-	path = third-parties
-	url = https://github.com/kairzhanable/sfml-widgets.git
