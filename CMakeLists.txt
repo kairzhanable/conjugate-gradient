@@ -38,3 +38,7 @@ elseif(APPLE)
     #OSX specific code
     target_link_libraries(gradient PUBLIC sfml-graphics sfml-audio sfml-window sfml-system "-framework OpenGL" ${SFML-WIDGETS_LIB})
 endif()
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${CMAKE_SOURCE_DIR}/demo/ $<TARGET_FILE_DIR:${PROJECT_NAME}>/demo/)

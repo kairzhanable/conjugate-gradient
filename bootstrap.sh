@@ -25,3 +25,13 @@ cp -a libsfml-widgets.a $SCRIPTDIR/lib/
 echo 
 echo
 echo "Successfully built and installed sfml-widgets dependency!"
+
+# Build conjugate-gradient
+cd $SCRIPTDIR
+mkdir -p build && cd build/
+cmake ..
+make -j$cpu_count
+echo
+echo
+echo "Successfully built conjugate-gradient! Now run ./gradient to start the program!"
+echo "Proudly made by Kiiiiiira. Enjoy!"
