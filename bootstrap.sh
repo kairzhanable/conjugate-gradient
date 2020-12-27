@@ -34,4 +34,17 @@ make -j$cpu_count
 echo
 echo
 echo "Successfully built conjugate-gradient! Now run ./build/gradient to start the program!"
+
+cat << " "
+  /\ ___ /\
+ (  o   o  )
+  \  >#<  /
+  /       \
+ /         \       ^
+|           |     //
+ \         /    //
+  ///  ///   --
+Can I get a good mark, please? :)
+ 
+
 echo "Proudly made by Kiiiiiira. Enjoy!"
