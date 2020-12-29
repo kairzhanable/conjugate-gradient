@@ -3,7 +3,6 @@
 #include <memory.h>
 #include <vector>
 #include<chrono>
-//#include<omp.h>
 
 #include<SFML/Graphics.hpp>
 #include "Menu.hpp"
@@ -16,7 +15,7 @@ using namespace std::chrono;
 class CrsMatrix{
 public:
     int N;                  // размер матрицы NxN
-    int NZ;                 // Количество не нулевых элементов
+    int NZ;                 // Количество ненулевых элементов
     vector<double> Value;   // Массив значений (len = NZ)
     vector<int> Col;        // Массив номеров столбцов (len = NZ)
     vector<int> RowIndex;   // массив индексов строк (len = N + 1)
@@ -27,7 +26,7 @@ double MuliplicateVV(vector<double> A,      //вектор А
                     vector<double> B,       //вектор В
                     int size){              //размер векторов
     double result = 0;
-//    #pragma omp parallel for reduction (+:result)
+
     for(int i = 0; i < size; i++){
         result += A[i] * B[i];
     }
@@ -40,13 +39,13 @@ vector<double> MuliplicateMV(CrsMatrix M,           //матрица M
     int i = 0;
     int j = 0;
     vector<double> result(V.size(), 0);
-//    #pragma omp parallel for private(i, j)
+
     for (i = 0; i < M.N; i++){
         for(j = M.RowIndex[i]+1; j<M.RowIndex[i+1]; j++){
-//            #pragma omp atomic
+
             result[i] += M.Value[j] * V[M.Col[j]];
         }
-//        #pragma omp atomic
+
         result[i] += M.Value[M.RowIndex[i]] * V[M.Col[M.RowIndex[i]]];
     }
     return result;
@@ -54,13 +53,13 @@ vector<double> MuliplicateMV(CrsMatrix M,           //матрица M
 
 vector<double>  CGMethod (CrsMatrix A,   //матрица
                vector<double> b,         //вектор правой части
-               vector<double> x0,        //начальное приблежение
+               vector<double> x0,        //начальное приближение
                float eps,                //требуемая точность
-               int maxIter)              //максимальное число итераций
+               int maxIter, int& count)              //максимальное число итераций
 
 {
     vector<double> Xk(x0.size(), 0);     //вектор ответов
-    int count = 0;                       //число выполненных итераций
+//    int count = 0;                       //число выполненных итераций
 
     int size = A.N;
     vector<double> Rk_1(x0.size(), 0);
@@ -101,7 +100,7 @@ vector<double>  CGMethod (CrsMatrix A,   //матрица
             Rk_1[j] = Rk[j];
         }
     }
-    while ((check/norm > eps) && (count <= maxIter));  //прерываем решение если сошлось или достигли лимита
+    while ((check/norm > eps) && (count <= maxIter));  //прерываем решение, если сошлось или достигли лимита
     return Xk;
 }
 
@@ -171,7 +170,7 @@ CrsMatrix getStiffnessMatrix(double c, int BindingCount, double NumLoads, bool l
     }
     CrsMatrix matrixA;
     matrixA.N = NumLoads+1;                 // размер матрицы NxN
-    matrixA.NZ = Val.size();                // Количество не нулевых элементов
+    matrixA.NZ = Val.size();                // Количество ненулевых элементов
     matrixA.Col = Col;
     matrixA.RowIndex = Row;
     matrixA.Value = Val;
@@ -202,7 +201,7 @@ sf::Color hex2color(const std::string& hexcolor)
     return color;
 }
 
-void inputScreen(double& c, int& bindingCount, double& numLoads, double& endForce)
+void inputScreen(double& c, int& bindingCount, double& numLoads, double& endForce, bool& isClosed)
 {
     Theme defaultTheme = {
         hex2color("#dddbde"),
@@ -248,6 +247,7 @@ void inputScreen(double& c, int& bindingCount, double& numLoads, double& endForc
     });
 
     menu.addButton("Quit", [&]() {
+        isClosed = true;
         app.close();
     });
 
@@ -285,8 +285,12 @@ int main()
     int BindingCount;
     double NumLoads;
     double force_at_the_end;
+    bool isClosed = false;
+    int count = 0;      // счетчик итераций
 
-    inputScreen(c, BindingCount, NumLoads, force_at_the_end);
+    inputScreen(c, BindingCount, NumLoads, force_at_the_end, isClosed);
+
+    if (isClosed) return 0;
 
     bool log = true;
     if(NumLoads > 20){
@@ -312,8 +316,7 @@ int main()
         cout << endl<< endl;
     }
 
-
-    std::vector<double> First;    //начальное приблежение
+    std::vector<double> First;    //начальное приближение
     for(int i = 0; i <= NumLoads; i++){
         First.push_back(0);
     }
@@ -321,13 +324,14 @@ int main()
     auto start = high_resolution_clock::now();          // DEBUG
     auto result = CGMethod (StiffnessMatrix,            //матрица
               force,                                    //вектор правой части
-              First,                                    //начальное приблежение
+              First,                                    //начальное приближение
               0.000001,                                   //требуемая точность
-              100);                                      //максимальное число итераций
+              100, count);                                      //максимальное число итераций
 
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<seconds>(stop - start);
     cout << "Время исполнения функции: " << duration.count() <<" сек" <<endl;
+    cout << "Num of iterations: " << count << endl;
 
     if (log)
     {
